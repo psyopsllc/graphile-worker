@@ -1,7 +1,7 @@
 import { PoolClient } from "pg";
 import { WorkerSharedOptions } from "./interfaces";
 import { processSharedOptions } from "./lib";
-import * as sql from './sql';
+import * as sql from "./sql";
 
 function checkPostgresVersion(versionString: string) {
   const version = parseInt(versionString, 10);
@@ -43,7 +43,8 @@ async function runMigration(
   migrationNumber: number,
 ) {
   const { escapedWorkerSchema } = processSharedOptions(options);
-  const rawText = sql['sql_' + migrationFile.replace('.sql', '').replace(/-/g, '_')];
+  const rawText =
+    sql["sql_" + migrationFile.replace(".sql", "").replace(/-/g, "_")];
   const text = rawText.replace(
     /:GRAPHILE_WORKER_SCHEMA\b/g,
     escapedWorkerSchema,
@@ -88,7 +89,8 @@ export async function migrate(
     }
   }
 
-  const migrationFiles = Object.keys(sql).map(key => key.replace('sql_', '').replace(/_/g, '-') + '.sql')
+  const migrationFiles = Object.keys(sql)
+    .map((key) => key.replace("sql_", "").replace(/_/g, "-") + ".sql")
     .filter((f) => f.match(/^[0-9]{6}\.sql$/))
     .sort();
   for (const migrationFile of migrationFiles) {
